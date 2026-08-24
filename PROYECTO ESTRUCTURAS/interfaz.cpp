@@ -5,7 +5,6 @@
 
 using namespace std;
 
-// Verifica si todos los caracteres de un string son numeros
 bool esNumeroEntero(const string& cadena) {
     if (cadena.empty()) return false;
     for (char const &c : cadena) {
@@ -14,36 +13,29 @@ bool esNumeroEntero(const string& cadena) {
     return true;
 }
 
-// Verifica que el nombre tenga entre 1 y 8 caracteres
 bool esNombreJugadorValido(const string& nombre) {
     return (nombre.length() > 0 && nombre.length() <= 8);
 }
 
-// Divide el texto ingresado separandolo por los espacios
 vector<string> separarPalabras(const string& linea) {
     vector<string> palabras_comando;
     string palabra_individual;
     stringstream ss(linea);
-    
-    // Lee palabra por palabra y la guarda en el vector
+
     while (ss >> palabra_individual) {
         palabras_comando.push_back(palabra_individual);
     }
     return palabras_comando;
 }
 
-// Analiza el vector de palabras ingresadas por el usuario
 void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando) {
     if (palabras_comando.empty()) {
-        return; // El usuario solo presiono Enter, seguir esperando la entrada
+        return;
     }
 
     string comando_principal = palabras_comando[0];
     int cantidad_palabras = palabras_comando.size();
 
-    // ==========================================
-    // LOGICA DEL COMANDO: ayuda
-    // ==========================================
     if (comando_principal == "ayuda") {
         if (cantidad_palabras == 1) {
             cout << "Lista de comandos disponibles:" << endl;
@@ -119,7 +111,6 @@ void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando) {
     // LOGICA DE LOS DEMAS COMANDOS Y VALIDACION
     // ==========================================
 
-    //Implementaciones por ahcer solo muestar simulaciones de los comandos y la logica de la salida que deberia mostrar el juego en consola
 
   else if (comando_principal == "inicializar") {
         if (cantidad_palabras == 2) {
@@ -243,7 +234,6 @@ void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando) {
     }
 }
 
-// Bucle principal para la consola 
 void iniciarConsola() {
     string entrada;
     bool ejecutando = true;
