@@ -15,6 +15,13 @@ struct DatosTerritorio { //Esta estructura nos va a servir para identificar el n
     string continente;
 };
 
+struct Fronteras
+{
+    string terrritorio1;
+    string territorio2;
+};
+
+
 class Juego {
 
     private:
@@ -33,6 +40,7 @@ class Juego {
         bool VerificarGanador();
         Jugador* BuscarJugador(const string& nombre);
         Territorio* BuscarTerritorio(const string& nombre);
+        void ConfigurarFronteras();
 
 };
 

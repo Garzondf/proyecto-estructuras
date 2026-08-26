@@ -118,10 +118,7 @@ void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando, J
         else {
             cout << "Error en formato. Uso correcto: ayuda o ayuda <comando>" << endl;
         }
-    } 
-    // ==========================================
-    // LOGICA DE LOS DEMAS COMANDOS Y VALIDACION
-    // ==========================================
+    }
 
 
   else if (comando_principal == "Inicializar" || comando_principal == "inicializar") {
