@@ -14,6 +14,36 @@ Juego::Juego() {
 
 void Juego::InicializarJuego(const string& archivo) {
 
+    vector<DatosTerritorio> baseTerritorios = { //Este vector nos va a permitir encontrar los datos a partir del codigo del archivo, funciona como una base
+        {"1.1", "Alaska", "America del Norte"}, {"1.2", "Alberta", "America del Norte"}, 
+        {"1.3", "America Central", "America del Norte"}, {"1.4", "Estados Unidos Orientales", "America del Norte"}, 
+        {"1.5", "Groenlandia", "America del Norte"}, {"1.6", "Territorio Noroccidental", "America del Norte"}, 
+        {"1.7", "Ontario", "America del Norte"}, {"1.8", "Quebec", "America del Norte"}, 
+        {"1.9", "Estados Unidos Occidentales", "America del Norte"},
+        
+        {"2.1", "Argentina", "America del Sur"}, {"2.2", "Brasil", "America del Sur"}, 
+        {"2.3", "Peru", "America del Sur"}, {"2.4", "Venezuela", "America del Sur"},
+        
+        {"3.1", "Gran Bretana", "Europa"}, {"3.2", "Islandia", "Europa"}, 
+        {"3.3", "Europa del Norte", "Europa"}, {"3.4", "Escandinavia", "Europa"}, 
+        {"3.5", "Europa del Sur", "Europa"}, {"3.6", "Ucrania", "Europa"}, 
+        {"3.7", "Europa Occidental", "Europa"},
+        
+        {"4.1", "Congo", "Africa"}, {"4.2", "Africa Oriental", "Africa"}, 
+        {"4.3", "Egipto", "Africa"}, {"4.4", "Madagascar", "Africa"}, 
+        {"4.5", "Africa del Norte", "Africa"}, {"4.6", "Africa del Sur", "Africa"},
+        
+        {"5.1", "Afghanistan", "Asia"}, {"5.2", "China", "Asia"}, 
+        {"5.3", "India", "Asia"}, {"5.4", "Irkutsk", "Asia"}, 
+        {"5.5", "Japon", "Asia"}, {"5.6", "Kamchatka", "Asia"}, 
+        {"5.7", "Medio Oriente", "Asia"}, {"5.8", "Mongolia", "Asia"}, 
+        {"5.9", "Siam", "Asia"}, {"5.10", "Siberia", "Asia"}, 
+        {"5.11", "Ural", "Asia"}, {"5.12", "Yakutsk", "Asia"},
+        
+        {"6.1", "Australia Oriental", "Australia"}, {"6.2", "Indonesia", "Australia"}, 
+        {"6.3", "Nueva Guinea", "Australia"}, {"6.4", "Australia Occidental", "Australia"}
+    };
+
     if (juegoInicializado) {
         cout << "(Juego en curso) El juego ya ha sido inicializado." << endl;
         return;
@@ -57,7 +87,7 @@ void Juego::InicializarJuego(const string& archivo) {
         return;
     }
 
-    for (int i = 0; i < cantidadJugadores; i++) {
+    for (int i = 0; i < cantidadJugadores; i++) { //Crear jugadores
 
         string nombreJugador;
         string colorJugador;
@@ -72,6 +102,8 @@ void Juego::InicializarJuego(const string& archivo) {
 
     }
 
+    // Leer territorios y asociarlos a partir de su codigo
+
     string codigoTerritorio;
     string color;
     int unidades;
@@ -85,7 +117,7 @@ void Juego::InicializarJuego(const string& archivo) {
         for (Jugador* jugador : jugadores) {
             if (jugador->ObtenerColor() == color) { //Va a asociar el color del jugador con el color de ese territorio para saber quien es el dueño
                 dueño = jugador;
-                dueño->AgregarEjercito(unidades); //Revisamos que si haya un control
+                dueño->AgregarEjercito(unidades); //Revisamos que si hubiese un control
                 break;
             }
         }
@@ -96,40 +128,23 @@ void Juego::InicializarJuego(const string& archivo) {
             return;
         }
 
-        string continente; // Comparacion para asignar el continente al territorio segun su codigo
+        string nombreContinente; // Comparacion para asignar el continente al territorio segun su codigo
+        string nombreTerritorio;
+        bool bandera = false; 
 
-        if ( codigoTerritorio[0] == '1' ){ 
+        for (vector<DatosTerritorio>:: iterator it = baseTerritorios.begin(); bandera == false && it != baseTerritorios.end(); it++ ){
+            //A partir de la base que tenemos podemos identificar los territorios y se sale de forma segura POR SI EN ALGUN CASO no se encuentra
 
-            continente = "America del Norte";
+            if (it -> codigo == codigoTerritorio){
 
+                nombreContinente = it -> continente;
+                nombreTerritorio = it -> nombre;
+                bandera = true;
+            }
         }
-        else if (codigoTerritorio[0] == '2'){
+        
 
-            continente = "America del Sur";
-
-        }
-        else if (codigoTerritorio[0] == '3'){
-
-            continente = "Europa";
-
-        }
-        else if (codigoTerritorio[0] == '4'){
-
-            continente = "Africa";
-
-        }
-        else if (codigoTerritorio[0] == '5'){
-
-            continente = "Asia";
-
-        }
-        else if (codigoTerritorio[0] == '6'){
-
-            continente = "Australia";
-
-        }
-
-        Territorio* territorio = new Territorio("Territorio" + codigoTerritorio, codigoTerritorio, continente, dueño, unidades);
+        Territorio* territorio = new Territorio(nombreTerritorio, codigoTerritorio, nombreContinente, dueño, unidades);
         territorios.push_back(territorio); // Se agrega el territorio a la lista de territorios de juego
         if (dueño != nullptr) {
             dueño->AgregarTerritorio(territorio); // Se agrega el territorio a la lista de territorios del jugador dueño

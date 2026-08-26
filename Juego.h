@@ -9,6 +9,12 @@
 #include <list>
 using namespace std;
 
+struct DatosTerritorio { //Esta estructura nos va a servir para identificar el nombre y continente cuando lo leamos del archivo de texto
+    string codigo;
+    string nombre;
+    string continente;
+};
+
 class Juego {
 
     private:
