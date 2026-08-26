@@ -15,6 +15,7 @@ class Juego {
         vector<Jugador*> jugadores; //Indica los jugadores en una partida
         list<Territorio*> territorios; //Indica los territorios en una partida
         Jugador* jugadorActual; // Indica que jugador tiene el turno actual
+        bool juegoInicializado; //Esta variable la vamos a usar para saber si el juego ya fue iniciado
 
     public:
         Juego(); //Constructor por defecto

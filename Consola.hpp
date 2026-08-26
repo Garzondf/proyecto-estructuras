@@ -125,20 +125,28 @@ void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando, J
 
 
   else if (comando_principal == "Inicializar" || comando_principal == "inicializar") {
+
         if (cantidad_palabras == 2) {
-            string nombre_archivo = palabras_comando[1];
+            string nombre_archivo = palabras_comando[1]; //Para esta entrega aun no hacemos uso de binarios
             bool es_txt = (nombre_archivo.length() >= 4 && nombre_archivo.substr(nombre_archivo.length() - 4) == ".txt");
             bool es_bin = (nombre_archivo.length() >= 4 && nombre_archivo.substr(nombre_archivo.length() - 4) == ".bin");
             
-            // Validamos que termine en .txt o .bin
-            if (es_txt || es_bin) {
-                cout << "(simulacion!!!!) Comando inicializar ejecutado con archivo: " << nombre_archivo << endl;
+            // Validamos que termine sea un txt
+            if (es_txt) {
+
+                juego.InicializarJuego(nombre_archivo);
+
+            } else if (es_bin) {
+
+                cout << "(Archivo no valido) El archivo debe tener extension .txt" << endl;
+
             } else {
-                cout << "(Archivo sin formato) El archivo debe tener extension .txt o .bin" << endl;
+
+                cout << "(Archivo no valido) El archivo debe tener extension .txt" << endl;
+
             }
-        } else {
-            cout << "Uso incorrecto. Sintaxis: Inicializar <archivo_inicio.txt o binario>" << endl;
         }
+
     }
     else if (comando_principal == "Obtener_unidades" || comando_principal == "obtener_unidades") {
         if (cantidad_palabras == 2) {
