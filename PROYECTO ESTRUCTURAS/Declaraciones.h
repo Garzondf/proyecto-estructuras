@@ -8,9 +8,13 @@ using namespace std;
 // Inicia el bucle infinito de la terminal con el indicador $
 void iniciarConsola();
 
-// Funciones auxiliares para la interfaz
+class Jugador;
+class Territorio;
+class Juego; 
+
+// Funciones auxiliares
 vector<string> separarPalabras(const string& linea);
-void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando);
+void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando, Juego& juego);
 
 // Funciones de validacion
 bool esNumeroEntero(const string& cadena);
@@ -23,48 +27,52 @@ bool esNombreJugadorValido(const string& nombre);
 // Jugador* jugador = &nombre    con este apuntador ahora se pueden acceder directamente al dato de tipo jugador
 
 
-class Jugador;
-class Territorio;
-
 class Jugador {
     private:
-        string nombre;
-        string color;
-        int ejercito;
-        list<Territorio*> territorios;
-        vector<string> cartas;
+        string nombre; //Indica el nombre del jugador
+        string color; //Indica el color del jugador
+        int ejercito; //Indica la cantidad de ejercito que tiene el jugador
+        list<Territorio*> territorios; //Indica los territorios que posee el jugador
+        vector<string> cartas; // Indica las cartas que posee el jugador
 
     public:
         Jugador(const string& nombre, const string& color);
         void AgregarTerritorio(Territorio* territorio);
         void EliminarTerritorio(Territorio* territorio);
-        const list<Territorio*>& ObtenerTerritorios() const;
-        const vector<string>& ObtenerCartas() const;
-        int ObtenerEjercito() const;
         void AgregarEjercito(int cantidad);
         void EliminarEjercito(int cantidad);
+        //Getters
+        const string& ObtenerNombre() const;
+        const string& ObtenerColor() const;
+        int ObtenerEjercito() const;
+        const list<Territorio*>& ObtenerTerritorios() const;
+        const vector<string>& ObtenerCartas() const;
 };
 
 class Territorio {
     private:
-        string nombre;
-        int codigo;
-        string continente;
-        Jugador* dueño;
-        int ejercitoPorTerritorio;
-        list<Territorio*> territoriosAdyacentes;
+        string nombre; //Indica el nombre del territorio
+        int codigo; //Indica el codigo del territorio
+        string continente; //Indica el continente al que pertenece el territorio
+        Jugador* dueño; //Indica el jugador que posee el territorio
+        int unidades; //Indica la cantidad de unidades que estan en el territorio
+        list<Territorio*> territoriosAdyacentes; //Indica los territorios que son vecinos del territorio actual, es decir, aquellos territorios a los que se puede atacar desde el territorio actual
 
     public:
 
-        Territorio(const string& nombre, int codigo, const string& continente);
+        Territorio(const string& nombre, int codigo, const string& continente, Jugador* dueño, int unidades);
         void AgregarUnidades(int cantidad);
         void EliminarUnidades(int cantidad);
-        int ObtenerUnidades() const;
-        Jugador* ObtenerDueño() const;
-        const string& ObtenerContinente() const;
         void CambiarDueño(Jugador* nuevoDueño);
         void AgregarVecino(Territorio* vecino);
         bool VerificarVecino(Territorio* vecino) const;
+        // Getters
+        const string& ObtenerNombre() const;
+        const string& ObtenerContinente() const;
+        int ObtenerCodigo() const;
+        int ObtenerUnidades() const;
+        Jugador* ObtenerDueño() const;
+        const list<Territorio*>& ObtenerVecinos() const;
 
 };
 
@@ -75,14 +83,16 @@ class Juego {
         list<Territorio*> territorios; //Indica los territorios en una partida
         Jugador* jugadorActual; // Indica que jugador tiene el turno actual
 
-    public: //Los atributos estan sujetos a cambios
+    public:
         Juego(); //Constructor por defecto
-        void InicializarJuego(const vector<string>& jugadores, const list<string>& territorios);
+        void InicializarJuego(const string& archivo);
         void AtacarTerritorio(const string& jugador, const string& territorio);
         void FortificarTerritorio(const string& jugador, const string& territorio);
         void CambiarTurno(const string& jugador);
         void EstadoJuego();
         bool VerificarGanador();
+        Jugador* BuscarJugador(const string& nombre);
+        Territorio* BuscarTerritorio(const string& nombre);
 
 };
 

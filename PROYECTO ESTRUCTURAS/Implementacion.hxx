@@ -5,11 +5,15 @@
 
 using namespace std;
 
-bool esNumeroEntero(const string& cadena) {
+bool esNumeroEntero(const string& cadena)  // Tambien funciona para numeros negativos
+{
     if (cadena.empty()) return false;
-    for (char const &c : cadena) {
+
+    for (char const &c : cadena)
+    {
         if (isdigit(c) == 0) return false;
     }
+
     return true;
 }
 
@@ -19,18 +23,22 @@ bool esNombreJugadorValido(const string& nombre) {
 }
 
 vector<string> separarPalabras(const string& linea) {
+
     vector<string> palabras_comando;
+
     string palabra_individual;
+
     stringstream ss(linea);
 
     while (ss >> palabra_individual) {
+        
         palabras_comando.push_back(palabra_individual);
     }
     return palabras_comando;
 }
 
 
-void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando) {
+void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando, Juego& juego) {
     if (palabras_comando.empty()) {
         return;
     }
@@ -239,17 +247,22 @@ void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando) {
 }
 
 
-void iniciarConsola() {
+void iniciarConsola()
+{
+    Juego juego;
+
     string entrada;
     bool ejecutando = true;
 
-    cout << "Bienvenido. Escribe 'ayuda' para ver los comandos disponibles." << endl;
+    cout << "Bienvenido..." << endl;
 
-    while (ejecutando) {
-        cout << "$ "; // Indicador de linea de comando exigido
+    while (ejecutando)
+    {
+        cout << "$ ";
         getline(cin, entrada);
-        
-        vector<string> palabras_comando = separarPalabras(entrada);
-        procesarEntrada(palabras_comando, ejecutando);
+
+        vector<string> palabras = separarPalabras(entrada);
+
+        procesarEntrada(palabras, ejecutando, juego);
     }
 }
