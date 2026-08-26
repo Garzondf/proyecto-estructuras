@@ -18,11 +18,10 @@ struct ConexionFrontera {
     string territorio2;
 };
 
-void Juego::ConfigurarFronteras() {
+void Juego::ConfigurarFronteras() {  //Los jugadores no se agregan dos veces porque el metodo agregar vecino revisa que no existe otro antes
     vector<ConexionFrontera> fronteras_del_mundo = {
-        // ==========================================
+
         // 1. AMÉRICA DEL NORTE
-        // ==========================================
         // 1.1 Alaska
         {"1.1", "1.6"}, {"1.1", "1.2"}, {"1.1", "5.6"},
         // 1.2 Alberta
@@ -42,9 +41,7 @@ void Juego::ConfigurarFronteras() {
         // 1.9 Estados Unidos Occidentales
         {"1.9", "1.2"}, {"1.9", "1.7"}, {"1.9", "1.4"}, {"1.9", "1.3"},
 
-        // ==========================================
         // 2. AMÉRICA DEL SUR
-        // ==========================================
         // 2.1 Argentina
         {"2.1", "2.2"}, {"2.1", "2.3"},
         // 2.2 Brasil
@@ -54,9 +51,7 @@ void Juego::ConfigurarFronteras() {
         // 2.4 Venezuela
         {"2.4", "1.3"}, {"2.4", "2.2"}, {"2.4", "2.3"},
 
-        // ==========================================
         // 3. EUROPA
-        // ==========================================
         // 3.1 Gran Bretaña
         {"3.1", "3.2"}, {"3.1", "3.4"}, {"3.1", "3.3"}, {"3.1", "3.7"},
         // 3.2 Islandia
@@ -72,9 +67,7 @@ void Juego::ConfigurarFronteras() {
         // 3.7 Europa Occidental
         {"3.7", "3.1"}, {"3.7", "3.3"}, {"3.7", "3.5"}, {"3.7", "4.5"},
 
-        // ==========================================
         // 4. ÁFRICA
-        // ==========================================
         // 4.1 Congo
         {"4.1", "4.5"}, {"4.1", "4.2"}, {"4.1", "4.6"},
         // 4.2 África Oriental
@@ -88,9 +81,7 @@ void Juego::ConfigurarFronteras() {
         // 4.6 África del Sur
         {"4.6", "4.1"}, {"4.6", "4.2"}, {"4.6", "4.4"},
 
-        // ==========================================
         // 5. ASIA
-        // ==========================================
         // 5.1 Afganistán
         {"5.1", "5.11"}, {"5.1", "5.7"}, {"5.1", "5.3"}, {"5.1", "5.2"}, {"5.1", "3.6"},
         // 5.2 China
@@ -116,9 +107,7 @@ void Juego::ConfigurarFronteras() {
         // 5.12 Yakutsk
         {"5.12", "5.10"}, {"5.12", "5.4"}, {"5.12", "5.6"},
 
-        // ==========================================
         // 6. AUSTRALIA
-        // ==========================================
         // 6.1 Australia Oriental
         {"6.1", "6.4"}, {"6.1", "6.3"},
         // 6.2 Indonesia
