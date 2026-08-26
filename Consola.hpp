@@ -1,7 +1,9 @@
-#include "Declaraciones.h"
+#include "Consola.h"
+#include "Juego.h"
+
 #include <iostream>
 #include <sstream>
-#include <cctype> 
+#include <cctype>
 
 using namespace std;
 
@@ -17,7 +19,6 @@ bool esNumeroEntero(const string& cadena)  // Tambien funciona para numeros nega
     return true;
 }
 
-
 bool esNombreJugadorValido(const string& nombre) {
     return (nombre.length() > 0 && nombre.length() <= 8);
 }
@@ -31,12 +32,11 @@ vector<string> separarPalabras(const string& linea) {
     stringstream ss(linea);
 
     while (ss >> palabra_individual) {
-        
+
         palabras_comando.push_back(palabra_individual);
     }
     return palabras_comando;
 }
-
 
 void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando, Juego& juego) {
     if (palabras_comando.empty()) {

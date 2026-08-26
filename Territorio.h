@@ -1,0 +1,37 @@
+#ifndef TERRITORIO_H
+#define TERRITORIO_H
+
+#include <string>
+#include <vector>
+#include <list>
+using namespace std;
+
+class Jugador; //Podemos usar una declaracion adelantada, no necesitamos conocer todo el TAD jugador, solo necesitamos saber que existe para apuntar
+class Territorio {
+    private:
+        string nombre; //Indica el nombre del territorio
+        float codigo; //Indica el codigo del territorio
+        string continente; //Indica el continente al que pertenece el territorio
+        Jugador* dueño; //Indica el jugador que posee el territorio
+        int unidades; //Indica la cantidad de unidades que estan en el territorio
+        list<Territorio*> territoriosAdyacentes; //Indica los territorios que son vecinos del territorio actual, es decir, aquellos territorios a los que se puede atacar desde el territorio actual
+
+    public:
+
+        Territorio(const string& nombre, float codigo, const string& continente, Jugador* dueño, int unidades);
+        void AgregarUnidades(int cantidad);
+        void EliminarUnidades(int cantidad);
+        void CambiarDueño(Jugador* nuevoDueño);
+        void AgregarVecino(Territorio* vecino);
+        bool VerificarVecino(Territorio* vecino) const;
+        // Getters
+        const string& ObtenerNombre() const;
+        const string& ObtenerContinente() const;
+        float ObtenerCodigo() const;
+        int ObtenerUnidades() const;
+        Jugador* ObtenerDueño() const;
+        const list<Territorio*>& ObtenerVecinos() const;
+
+};
+
+#endif
