@@ -34,6 +34,7 @@ class Juego {
         Juego(); //Constructor por defecto
         void InicializarJuego(const string& archivo);
         void AtacarTerritorio(const string& jugador, const string& territorio);
+        void EliminarJugadorDeJuego(Jugador* jugadorAEliminar);
         void FortificarTerritorio(const string& jugador, const string& territorio);
         void CambiarTurno(const string& jugador);
         void EstadoJuego();
