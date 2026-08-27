@@ -1,21 +1,19 @@
 #ifndef CONSOLA_H
 #define CONSOLA_H
 
+#include "Juego.h"
 #include <string>
 #include <vector>
 
 using namespace std;
 
-class Juego; //La necesitamos porque aca tenemos una funcion que recibe el objeto como parametro
-
-void iniciarConsola();
-
+// Funciones auxiliares de la consola
+bool esNumeroEntero(const string& cadena);
+bool esNombreJugadorValido(const string& nombre);
 vector<string> separarPalabras(const string& linea);
 
+// Prototipos de la consola
 void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando, Juego& juego);
-
-bool esNumeroEntero(const string& cadena);
-
-bool esNombreJugadorValido(const string& nombre);
+void iniciarConsola();
 
 #endif
