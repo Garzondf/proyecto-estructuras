@@ -553,19 +553,19 @@ void Juego::AtacarTerritorio(const string &jugador, const string &territorio)
     Territorio *destino = BuscarTerritorio(nombreDestino);
     if (destino == nullptr)
     {
-        cout << "(Territorio no válido) El territorio " << nombreDestino << " no existe." << endl;
+        cout << "(Territorio no valido) El territorio " << nombreDestino << " no existe." << endl;
         return;
     }
 
     if (destino->ObtenerDueño() == jugadorActualPtr)
     {
-        cout << "(Territorio no válido) El territorio " << nombreDestino << " ya pertenece al jugador " << jugador << "." << endl;
+        cout << "(Territorio no valido) El territorio " << nombreDestino << " ya pertenece al jugador " << jugador << "." << endl;
         return;
     }
 
     if (!origen->VerificarVecino(destino))
     {
-        cout << "(Territorios no colindantes) El territorio " << destino->ObtenerNombre() << " no es vecino de " << origen->ObtenerNombre() << "." << endl;
+        cout << "(Territorios no adyacentes) El territorio " << destino->ObtenerNombre() << " no es vecino de " << origen->ObtenerNombre() << "." << endl;
         return;
     }
     // fin casos error
