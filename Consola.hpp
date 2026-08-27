@@ -145,8 +145,7 @@ void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando, J
     else if (comando_principal == "Fortificar" || comando_principal == "fortificar") {
         if (cantidad_palabras == 2) {
             if (esNombreJugadorValido(palabras_comando[1])) {
-                // TODO: IMPLEMENTAR METODO REAL -> juego.Fortificar(palabras_comando[1]);
-                cout << "(Pendiente implementar) Comando fortificar para: " << palabras_comando[1] << endl;
+                juego.FortificarTerritorio(palabras_comando[1], "");
             } else {
                 cout << "(Jugador no valido) El nombre debe tener maximo 8 caracteres." << endl;
             }

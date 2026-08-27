@@ -49,221 +49,52 @@ Territorio *Juego::BuscarTerritorio(const string &busqueda)
 }
 void Juego::ConfigurarFronteras()
 { // Los jugadores no se agregan dos veces porque el metodo agregar vecino revisa que no existe otro antes
-    vector<ConexionFrontera> fronteras_del_mundo = {
+   vector<ConexionFrontera> fronteras_del_mundo = {
+    // América del Norte
+    {"1.1", "1.2"}, {"1.1", "1.6"}, {"1.1", "5.6"},
+    {"1.2", "1.6"}, {"1.2", "1.7"}, {"1.2", "1.9"},
+    {"1.3", "1.4"}, {"1.3", "1.9"}, {"1.3", "2.4"},
+    {"1.4", "1.7"}, {"1.4", "1.8"}, {"1.4", "1.9"},
+    {"1.5", "1.6"}, {"1.5", "1.7"}, {"1.5", "1.8"}, {"1.5", "3.2"},
+    {"1.6", "1.7"},
+    {"1.7", "1.8"}, {"1.7", "1.9"},
 
-        // 1. AMÉRICA DEL NORTE
-        // 1.1 Alaska
-        {"1.1", "1.6"},
-        {"1.1", "1.2"},
-        {"1.1", "5.6"},
-        // 1.2 Alberta
-        {"1.2", "1.6"},
-        {"1.2", "1.7"},
-        {"1.2", "1.9"},
-        // 1.3 América Central
-        {"1.3", "1.9"},
-        {"1.3", "1.4"},
-        {"1.3", "2.4"},
-        // 1.4 Estados Unidos Orientales
-        {"1.4", "1.9"},
-        {"1.4", "1.7"},
-        {"1.4", "1.8"},
-        {"1.4", "1.3"},
-        // 1.5 Groenlandia
-        {"1.5", "1.6"},
-        {"1.5", "1.7"},
-        {"1.5", "1.8"},
-        {"1.5", "3.2"},
-        // 1.6 Territorio Noroccidental
-        {"1.6", "1.7"},
-        {"1.6", "1.5"},
-        // 1.7 Ontario
-        {"1.7", "1.6"},
-        {"1.7", "1.2"},
-        {"1.7", "1.9"},
-        {"1.7", "1.4"},
-        {"1.7", "1.8"},
-        {"1.7", "1.5"},
-        // 1.8 Quebec
-        {"1.8", "1.7"},
-        {"1.8", "1.4"},
-        {"1.8", "1.5"},
-        // 1.9 Estados Unidos Occidentales
-        {"1.9", "1.2"},
-        {"1.9", "1.7"},
-        {"1.9", "1.4"},
-        {"1.9", "1.3"},
+    // América del Sur
+    {"2.1", "2.2"}, {"2.1", "2.3"},
+    {"2.2", "2.3"}, {"2.2", "2.4"}, {"2.2", "4.5"},
+    {"2.3", "2.4"},
 
-        // 2. AMÉRICA DEL SUR
-        // 2.1 Argentina
-        {"2.1", "2.2"},
-        {"2.1", "2.3"},
-        // 2.2 Brasil
-        {"2.2", "2.3"},
-        {"2.2", "2.4"},
-        {"2.2", "2.1"},
-        {"2.2", "4.5"},
-        // 2.3 Perú
-        {"2.3", "2.4"},
-        {"2.3", "2.2"},
-        {"2.3", "2.1"},
-        // 2.4 Venezuela
-        {"2.4", "1.3"},
-        {"2.4", "2.2"},
-        {"2.4", "2.3"},
+    // Europa
+    {"3.1", "3.2"}, {"3.1", "3.3"}, {"3.1", "3.4"}, {"3.1", "3.7"},
+    {"3.2", "3.4"},
+    {"3.3", "3.4"}, {"3.3", "3.5"}, {"3.3", "3.6"}, {"3.3", "3.7"},
+    {"3.4", "3.6"},
+    {"3.5", "3.6"}, {"3.5", "3.7"}, {"3.5", "4.3"}, {"3.5", "4.5"}, {"3.5", "5.7"},
+    {"3.6", "5.1"}, {"3.6", "5.7"}, {"3.6", "5.11"},
+    {"3.7", "4.5"},
 
-        // 3. EUROPA
-        // 3.1 Gran Bretaña
-        {"3.1", "3.2"},
-        {"3.1", "3.4"},
-        {"3.1", "3.3"},
-        {"3.1", "3.7"},
-        // 3.2 Islandia
-        {"3.2", "1.5"},
-        {"3.2", "3.1"},
-        {"3.2", "3.4"},
-        // 3.3 Europa del Norte
-        {"3.3", "3.1"},
-        {"3.3", "3.7"},
-        {"3.3", "3.5"},
-        {"3.3", "3.6"},
-        {"3.3", "3.4"},
-        // 3.4 Escandinavia
-        {"3.4", "3.2"},
-        {"3.4", "3.1"},
-        {"3.4", "3.3"},
-        {"3.4", "3.6"},
-        // 3.5 Europa del Sur
-        {"3.5", "3.7"},
-        {"3.5", "3.3"},
-        {"3.5", "3.6"},
-        {"3.5", "4.3"},
-        {"3.5", "5.7"},
-        {"3.5", "3.1" /* Nota: Italia conecta con Western Europe, manejado aparte */},
-        // 3.6 Ucrania
-        {"3.6", "3.4"},
-        {"3.6", "3.3"},
-        {"3.6", "3.5"},
-        {"3.6", "5.1"},
-        {"3.6", "5.7"},
-        {"3.6", "5.11"},
-        // 3.7 Europa Occidental
-        {"3.7", "3.1"},
-        {"3.7", "3.3"},
-        {"3.7", "3.5"},
-        {"3.7", "4.5"},
+    // África
+    {"4.1", "4.2"}, {"4.1", "4.5"}, {"4.1", "4.6"},
+    {"4.2", "4.3"}, {"4.2", "4.4"}, {"4.2", "4.5"}, {"4.2", "4.6"}, {"4.2", "5.7"},
+    {"4.3", "4.5"}, {"4.3", "5.7"},
+    {"4.4", "4.6"},
 
-        // 4. ÁFRICA
-        // 4.1 Congo
-        {"4.1", "4.5"},
-        {"4.1", "4.2"},
-        {"4.1", "4.6"},
-        // 4.2 África Oriental
-        {"4.2", "4.5"},
-        {"4.2", "4.3"},
-        {"4.2", "5.7"},
-        {"4.2", "4.1"},
-        {"4.2", "4.6"},
-        {"4.2", "4.4"},
-        // 4.3 Egipto
-        {"4.3", "4.5"},
-        {"4.3", "5.7"},
-        {"4.3", "3.5"},
-        {"4.3", "4.2"},
-        // 4.4 Madagascar
-        {"4.4", "4.2"},
-        {"4.4", "4.6"},
-        // 4.5 África del Norte
-        {"4.5", "3.7"},
-        {"4.5", "4.3"},
-        {"4.5", "4.2"},
-        {"4.5", "4.1"},
-        {"4.5", "2.2"},
-        // 4.6 África del Sur
-        {"4.6", "4.1"},
-        {"4.6", "4.2"},
-        {"4.6", "4.4"},
+    // Asia
+    {"5.1", "5.2"}, {"5.1", "5.3"}, {"5.1", "5.7"}, {"5.1", "5.11"},
+    {"5.2", "5.3"}, {"5.2", "5.8"}, {"5.2", "5.9"},
+    {"5.3", "5.7"}, {"5.3", "5.9"},
+    {"5.4", "5.6"}, {"5.4", "5.8"},
+    {"5.5", "5.6"}, {"5.5", "5.8"},
+    {"5.6", "5.8"},
+    {"5.9", "6.2"},
+    {"5.10", "5.2"}, {"5.10", "5.4"}, {"5.10", "5.8"}, {"5.10", "5.11"}, {"5.10", "5.12"},
+    {"5.11", "5.2"},
+    {"5.12", "5.4"}, {"5.12", "5.6"},
 
-        // 5. ASIA
-        // 5.1 Afganistán
-        {"5.1", "5.11"},
-        {"5.1", "5.7"},
-        {"5.1", "5.3"},
-        {"5.1", "5.2"},
-        {"5.1", "3.6"},
-        // 5.2 China
-        {"5.2", "5.11"},
-        {"5.2", "5.10"},
-        {"5.2", "5.8"},
-        {"5.2", "5.9"},
-        {"5.2", "5.3"},
-        {"5.2", "5.1"},
-        // 5.3 India
-        {"5.3", "5.7"},
-        {"5.3", "5.1"},
-        {"5.3", "5.2"},
-        {"5.3", "5.9"},
-        // 5.4 Irkutsk
-        {"5.4", "5.10"},
-        {"5.4", "5.12"},
-        {"5.4", "5.6"},
-        {"5.4", "5.8"},
-        // 5.5 Japón
-        {"5.5", "5.6"},
-        {"5.5", "5.8"},
-        // 5.6 Kamchatka
-        {"5.6", "1.1"},
-        {"5.6", "5.12"},
-        {"5.6", "5.4"},
-        {"5.6", "5.8"},
-        {"5.6", "5.5"},
-        // 5.7 Medio Oriente
-        {"5.7", "3.6"},
-        {"5.7", "3.5"},
-        {"5.7", "4.3"},
-        {"5.7", "4.2"},
-        {"5.7", "5.3"},
-        {"5.7", "5.1"},
-        // 5.8 Mongolia
-        {"5.8", "5.10"},
-        {"5.8", "5.4"},
-        {"5.8", "5.6"},
-        {"5.8", "5.5"},
-        {"5.8", "5.2"},
-        // 5.9 Siam
-        {"5.9", "5.2"},
-        {"5.9", "5.3"},
-        {"5.9", "6.2"},
-        // 5.10 Siberia
-        {"5.10", "5.11"},
-        {"5.10", "5.12"},
-        {"5.10", "5.4"},
-        {"5.10", "5.8"},
-        {"5.10", "5.2"},
-        // 5.11 Ural
-        {"5.11", "3.6"},
-        {"5.11", "5.1"},
-        {"5.11", "5.2"},
-        {"5.11", "5.10"},
-        // 5.12 Yakutsk
-        {"5.12", "5.10"},
-        {"5.12", "5.4"},
-        {"5.12", "5.6"},
-
-        // 6. AUSTRALIA
-        // 6.1 Australia Oriental
-        {"6.1", "6.4"},
-        {"6.1", "6.3"},
-        // 6.2 Indonesia
-        {"6.2", "5.9"},
-        {"6.2", "6.4"},
-        {"6.2", "6.3"},
-        // 6.3 Nueva Guinea
-        {"6.3", "6.2"},
-        {"6.3", "6.1"},
-        // 6.4 Australia Occidental
-        {"6.4", "6.2"},
-        {"6.4", "6.1"}};
+    // Australia
+    {"6.1", "6.3"}, {"6.1", "6.4"},
+    {"6.2", "6.3"}, {"6.2", "6.4"}
+};
 
     // Recorrido estrictamente lineal para establecer la relación bidireccional
     for (size_t i = 0; i < fronteras_del_mundo.size(); i++)
@@ -671,23 +502,31 @@ void Juego::FortificarTerritorio(const string& jugador, const string& territorio
         cout << "El jugador " << jugador << " necesita al menos 2 territorios para fortificar." << endl;
         return;
     }
+
+    string nombreOrigen = territorio; //utilizamos esta variable para saber si tenemos un territorio directamente como parametro o tuvimos que cambiarlo
     
+    // Si el territorio viene vacío desde la consola, se lo pedimos al jugador
+    if (nombreOrigen.empty()) {
+        cout << "Ingrese el nombre del territorio desde el cual desea mover unidades: ";
+        getline(cin, nombreOrigen);
+    }
+
     // Buscar el territorio de origen
-    Territorio* territorioOrigen = BuscarTerritorio(territorio);
+    Territorio* territorioOrigen = BuscarTerritorio(nombreOrigen);
     if (territorioOrigen == nullptr) {
-        cout << "El territorio " << territorio << " no existe en el tablero." << endl;
+        cout << "El territorio " << nombreOrigen << " no existe en el tablero." << endl;
         return;
     }
     
     // Verificar que el territorio pertenezca al jugador
     if (territorioOrigen->ObtenerDueño() != jugadorActualObj) {
-        cout << "El territorio " << territorio << " no pertenece al jugador " << jugador << "." << endl;
+        cout << "El territorio " << nombreOrigen << " no pertenece al jugador " << nombreOrigen << "." << endl;
         return;
     }
     
     // Verificar que el territorio tenga más de 1 unidad
     if (territorioOrigen->ObtenerUnidades() <= 1) {
-        cout << "El territorio " << territorio << " tiene " << territorioOrigen->ObtenerUnidades() 
+        cout << "El territorio " << nombreOrigen << " tiene " << territorioOrigen->ObtenerUnidades() 
              << " unidades, debe tener al menos 2 para poder fortificar." << endl;
         return;
     }
@@ -932,6 +771,7 @@ void Juego::AtacarTerritorio(const string &jugador, const string &territorio)
         getline(cin, respuesta);
         if (respuesta != "s" && respuesta != "S")
         {
+            cout << "El jugador " << jugadorActualPtr -> ObtenerNombre() << " ha terminado de atacar\n";
             continuarAtacando = false;
         }
     }
