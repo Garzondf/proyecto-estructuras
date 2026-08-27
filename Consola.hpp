@@ -147,9 +147,8 @@ void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando, J
     }
     else if (comando_principal == "Obtener_unidades" || comando_principal == "obtener_unidades") {
         if (cantidad_palabras == 2) {
-            //editar para entrega 1 detectar si nombre de jugador existe en partida, si no existe mostrar mensaje de error
             if (esNombreJugadorValido(palabras_comando[1])) {
-                cout << "(simulacion!!!!) Comando obtener_unidades dando unidades a jugador: " << palabras_comando[1] << endl;
+                juego.ReclamarUnidades(palabras_comando[1]);
             } else {
                 cout << "(Jugador no valido) El nombre debe tener maximo 8 caracteres." << endl;
             }
@@ -187,15 +186,7 @@ void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando, J
     }
     else if (comando_principal == "Estado_juego" || comando_principal == "estado_juego") {
         if (cantidad_palabras == 1) {
-            cout << "(simulacion!!!!) Mostrando estado del juego." << endl;
-            cout << "(simulacion!!!!) Numero de jugadores: 2" << endl;
-            cout << "(simulacion!!!!) Jugador 1: Alice (Rojo)" << endl;
-            cout << "(simulacion!!!!) Jugador 2: Bob (Azul)" << endl;
-            cout << "(simulacion!!!!) Territorios: 25" << endl;
-            cout << "(simulacion!!!!) Turno actual: Alice" << endl;
-            cout << "(simulacion!!!!) Territorios y unidades:" << endl;
-            cout << "(simulacion!!!!)   - Territorio A: Alice (Rojo) - 5 unidades" << endl;
-            cout << "(simulacion!!!!)   - Territorio B: Bob (Azul) - 3 unidades" << endl;
+            juego.EstadoJuego();
             
         } else {
             cout << "Uso incorrecto. Sintaxis: estado_juego (no recibe parametros)" << endl;

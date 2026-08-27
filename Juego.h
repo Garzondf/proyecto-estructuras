@@ -41,6 +41,7 @@ class Juego {
         Jugador* BuscarJugador(const string& nombre);
         Territorio* BuscarTerritorio(const string& nombre);
         void ConfigurarFronteras();
+        void ReclamarUnidades(const string& nombreJugador);
 
 };
 
