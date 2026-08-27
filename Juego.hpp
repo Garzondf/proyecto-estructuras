@@ -471,13 +471,10 @@ void Juego::InicializarJuego(const string &archivo)
         }
     }
 
-    juegoInicializado = true; //Si todo esta bien, el juego se inicializa
-    jugadorActual = jugadores.front(); //El primer jugador de la lista va a ser el que tenga el turno inicial
-    cout << "El juego ha sido inicializado correctamente." << endl;
-    ConfigurarFronteras();             // Se llama a la funcion para configurar las fronteras del juego
-    juegoInicializado = true;          // Si todo esta bien, el juego se inicializa
-    jugadorActual = jugadores.front(); // El primer jugador de la lista va a ser el que tenga el turno inicial
-    srand(time(0));                    // Inicializa la semilla para la generación de números aleatorios basada en el tiempo actual
+    ConfigurarFronteras();              // Se llama a la funcion para configurar las fronteras del juego
+    juegoInicializado = true;           // Si todo esta bien, el juego se inicializa
+    jugadorActual = jugadores.front();  // El primer jugador de la lista va a ser el que tenga el turno inicial
+    srand(time(0));                     // Inicializa la semilla para la generación de números aleatorios basada en el tiempo actual
     cout << "(Juego inicializado) El juego ha sido inicializado correctamente." << endl;
 }
 
@@ -497,22 +494,16 @@ void Juego::EliminarJugadorDeJuego(Jugador *jugadorAEliminar)
     }
 }
 
-Jugador* Juego::BuscarJugador(const string& nombre) {
-    for (Jugador* j : jugadores) {
-        if (j->ObtenerNombre() == nombre){
-            return j;
-        } 
-    }
-    return nullptr;
-}
+void Juego::CambiarTurno(const string& jugador) {
+    if (jugadores.empty()) return;
 
-Territorio* Juego::BuscarTerritorio(const string& nombre) {
-    for (Territorio* t : territorios) {
-        if (t->ObtenerCodigo() == nombre){
-            return t;
+    for (size_t i = 0; i < jugadores.size(); i++) {
+        if (jugadores[i]->ObtenerNombre() == jugador) {
+            size_t siguiente = (i + 1) % jugadores.size();
+            jugadorActual = jugadores[siguiente];
+            return;
         }
     }
-    return nullptr;
 }
 
 bool Juego ::VerificarGanador(){
@@ -645,7 +636,7 @@ void Juego::EstadoJuego(){
         cout<<"Cantidad de unidades: "<<t->ObtenerUnidades()<<" "<<endl;
         
     }
-    
+}
 
 void Juego::FortificarTerritorio(const string& jugador, const string& territorio) {
     
@@ -675,7 +666,7 @@ void Juego::FortificarTerritorio(const string& jugador, const string& territorio
     }
     
     //  Verificar que el jugador tenga al menos dos territorios
-    vector<Territorio*> territoriosJugador = jugadorActualObj->ObtenerTerritorios();
+    const list<Territorio*>& territoriosJugador = jugadorActualObj->ObtenerTerritorios();
     if (territoriosJugador.size() < 2) {
         cout << "El jugador " << jugador << " necesita al menos 2 territorios para fortificar." << endl;
         return;
@@ -689,7 +680,7 @@ void Juego::FortificarTerritorio(const string& jugador, const string& territorio
     }
     
     // Verificar que el territorio pertenezca al jugador
-    if (territorioOrigen->ObtenerJugador() != jugadorActualObj) {
+    if (territorioOrigen->ObtenerDueño() != jugadorActualObj) {
         cout << "El territorio " << territorio << " no pertenece al jugador " << jugador << "." << endl;
         return;
     }
@@ -702,7 +693,8 @@ void Juego::FortificarTerritorio(const string& jugador, const string& territorio
     }
     
     // Mostrar los vecinos del territorio origen
-    vector<Territorio*> vecinos = territorioOrigen->ObtenerVecinos();
+    const list<Territorio*>& listaVecinos = territorioOrigen->ObtenerTerritoriosAdyacentes();
+    vector<Territorio*> vecinos(listaVecinos.begin(), listaVecinos.end());
     vector<Territorio*> vecinosDisponibles;
     
     cout << "\n FORTIFICACIÓN " << endl;
@@ -714,7 +706,7 @@ void Juego::FortificarTerritorio(const string& jugador, const string& territorio
     // mostrar solo los que pertenecen al jugador
     for (size_t i = 0; i < vecinos.size(); i++) {
         Territorio* vecino = vecinos[i];
-        if (vecino->ObtenerJugador() == jugadorActualObj) {
+        if (vecino->ObtenerDueño() == jugadorActualObj) {
             vecinosDisponibles.push_back(vecino);
             cout << vecinosDisponibles.size() << ". " << vecino->ObtenerNombre() << " (" 
                  << vecino->ObtenerCodigo() << ") - Unidades: " << vecino->ObtenerUnidades() << endl;
@@ -753,8 +745,8 @@ void Juego::FortificarTerritorio(const string& jugador, const string& territorio
     }
     
     // Realizar la fortificación
-    territorioOrigen->EstablecerUnidades(territorioOrigen->ObtenerUnidades() - unidadesAMover);
-    territorioDestino->EstablecerUnidades(territorioDestino->ObtenerUnidades() + unidadesAMover);
+    territorioOrigen->EliminarUnidades(unidadesAMover);
+    territorioDestino->AgregarUnidades(unidadesAMover);
     
     // Mostrar resultado
     cout << "El jugador " << jugador 
@@ -858,8 +850,10 @@ void Juego::AtacarTerritorio(const string &jugador, const string &territorio)
         int dadosAtacanteNum = min(3, origen->ObtenerUnidades() - 1); // El atacante puede lanzar hasta 3 dados, pero debe dejar al menos 1 unidad en el territorio
         int dadosDefensorNum = min(2, destino->ObtenerUnidades());    // El defensor puede lanzar hasta 2 dados, pero no más de las unidades que tiene
 
-        vector<int> dadosAtacante(dadosAtacanteNum);
-        vector<int> dadosDefensor(dadosDefensorNum);
+        vector<int> dadosAtacante;
+        vector<int> dadosDefensor;
+        dadosAtacante.reserve(dadosAtacanteNum);
+        dadosDefensor.reserve(dadosDefensorNum);
 
         for (int i = 0; i < dadosAtacanteNum; i++)
             dadosAtacante.push_back((rand() % 6) + 1);

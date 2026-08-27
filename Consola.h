@@ -2,6 +2,7 @@
 #define CONSOLA_H
 
 #include "Juego.h"
+#include "consola.hpp"
 #include <string>
 #include <vector>
 
