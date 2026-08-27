@@ -285,7 +285,132 @@ void Juego::InicializarJuego(const string& archivo) {
 
     juegoInicializado = true; //Si todo esta bien, el juego se inicializa
     jugadorActual = jugadores.front(); //El primer jugador de la lista va a ser el que tenga el turno inicial
-    cout << "(Juego inicializado) El juego ha sido inicializado correctamente." << endl;
+    cout << "El juego ha sido inicializado correctamente." << endl;
 
+}
+
+
+void Juego::FortificarTerritorio(const string& jugador, const string& territorio) {
+    
+    // Verificar si el juego está inicializado
+    if (!juegoInicializado) {
+        cout << "Esta partida no ha sido inicializada correctamente." << endl;
+        return;
+    }
+    
+    // Verificar si hay un ganador
+    if (VerificarGanador()) {
+        cout << "Esta partida ya tuvo un ganador." << endl;
+        return;
+    }
+    
+    //  Buscar el jugador
+    Jugador* jugadorActualObj = BuscarJugador(jugador);
+    if (jugadorActualObj == nullptr) {
+        cout << "El jugador " << jugador << " no forma parte de esta partida." << endl;
+        return;
+    }
+    
+    //  Verificar que sea el turno del jugador
+    if (this->jugadorActual != jugadorActualObj) {
+        cout << "No es el turno del jugador " << jugador << "." << endl;
+        return;
+    }
+    
+    //  Verificar que el jugador tenga al menos dos territorios
+    vector<Territorio*> territoriosJugador = jugadorActualObj->ObtenerTerritorios();
+    if (territoriosJugador.size() < 2) {
+        cout << "El jugador " << jugador << " necesita al menos 2 territorios para fortificar." << endl;
+        return;
+    }
+    
+    // Buscar el territorio de origen
+    Territorio* territorioOrigen = BuscarTerritorio(territorio);
+    if (territorioOrigen == nullptr) {
+        cout << "El territorio " << territorio << " no existe en el tablero." << endl;
+        return;
+    }
+    
+    // Verificar que el territorio pertenezca al jugador
+    if (territorioOrigen->ObtenerJugador() != jugadorActualObj) {
+        cout << "El territorio " << territorio << " no pertenece al jugador " << jugador << "." << endl;
+        return;
+    }
+    
+    // Verificar que el territorio tenga más de 1 unidad
+    if (territorioOrigen->ObtenerUnidades() <= 1) {
+        cout << "El territorio " << territorio << " tiene " << territorioOrigen->ObtenerUnidades() 
+             << " unidades, debe tener al menos 2 para poder fortificar." << endl;
+        return;
+    }
+    
+    // Mostrar los vecinos del territorio origen
+    vector<Territorio*> vecinos = territorioOrigen->ObtenerVecinos();
+    vector<Territorio*> vecinosDisponibles;
+    
+    cout << "\n FORTIFICACIÓN " << endl;
+    cout << "Territorio origen: " << territorioOrigen->ObtenerNombre() << " (" 
+         << territorioOrigen->ObtenerCodigo() << ")" << endl;
+    cout << "Unidades disponibles para mover: " << territorioOrigen->ObtenerUnidades() - 1 << endl;
+    cout << "\nTerritorios vecinos disponibles para fortificar:" << endl;
+    
+    // mostrar solo los que pertenecen al jugador
+    for (size_t i = 0; i < vecinos.size(); i++) {
+        Territorio* vecino = vecinos[i];
+        if (vecino->ObtenerJugador() == jugadorActualObj) {
+            vecinosDisponibles.push_back(vecino);
+            cout << vecinosDisponibles.size() << ". " << vecino->ObtenerNombre() << " (" 
+                 << vecino->ObtenerCodigo() << ") - Unidades: " << vecino->ObtenerUnidades() << endl;
+        }
+    }
+    
+    // Verificar si hay vecinos disponibles
+    if (vecinosDisponibles.empty()) {
+        cout << "(Fortificación inválida) No hay territorios vecinos pertenecientes al jugador " 
+             << jugador << " para fortificar." << endl;
+        return;
+    }
+    
+    //  Solicitar selección del territorio destino
+    int seleccionDestino;
+    cout << "\nSeleccione el número del territorio destino (1-" << vecinosDisponibles.size() << "): ";
+    cin >> seleccionDestino;
+    
+    if (seleccionDestino < 1 || seleccionDestino > static_cast<int>(vecinosDisponibles.size())) {
+        cout << "(Selección inválida) Opción no válida." << endl;
+        return;
+    }
+    
+    Territorio* territorioDestino = vecinosDisponibles[seleccionDestino - 1];
+    
+    // Solicitar la cantidad de unidades a mover
+    int maximoUnidades = territorioOrigen->ObtenerUnidades() - 1;
+    int unidadesAMover;
+    
+    cout << "Cantidad de unidades a mover (1-" << maximoUnidades << "): ";
+    cin >> unidadesAMover;
+    
+    if (unidadesAMover < 1 || unidadesAMover > maximoUnidades) {
+        cout << "(Cantidad inválida) Debe mover entre 1 y " << maximoUnidades << " unidades." << endl;
+        return;
+    }
+    
+    // Realizar la fortificación
+    territorioOrigen->EstablecerUnidades(territorioOrigen->ObtenerUnidades() - unidadesAMover);
+    territorioDestino->EstablecerUnidades(territorioDestino->ObtenerUnidades() + unidadesAMover);
+    
+    // Mostrar resultado
+    cout << "El jugador " << jugador 
+         << " ha terminado de fortificar su posición." << endl;
+    cout << "Movió " << unidadesAMover << " unidades desde " 
+         << territorioOrigen->ObtenerNombre() << " hacia " 
+         << territorioDestino->ObtenerNombre() << "." << endl;
+    cout << "Unidades en " << territorioOrigen->ObtenerNombre() << ": " 
+         << territorioOrigen->ObtenerUnidades() << endl;
+    cout << "Unidades en " << territorioDestino->ObtenerNombre() << ": " 
+         << territorioDestino->ObtenerUnidades() << endl;
+    
+    // Cambiar el turno después de fortificar
+    CambiarTurno(jugador);
 }
 
