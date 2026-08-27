@@ -133,9 +133,8 @@ void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando, J
     }
     else if (comando_principal == "Obtener_unidades" || comando_principal == "obtener_unidades") {
         if (cantidad_palabras == 2) {
-            if (esNombreJugadorValido(palabras_comando[1])) {
-                // TODO: IMPLEMENTAR METODO REAL -> juego.ObtenerUnidades(palabras_comando[1]);
-                cout << "(Pendiente implementar) Comando obtener_unidades para: " << palabras_comando[1] << endl;
+              if (esNombreJugadorValido(palabras_comando[1])) {
+                juego.ReclamarUnidades(palabras_comando[1]);
             } else {
                 cout << "(Jugador no valido) El nombre debe tener maximo 8 caracteres." << endl;
             }
@@ -157,8 +156,8 @@ void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando, J
     }
     else if (comando_principal == "Estado_juego" || comando_principal == "estado_juego") {
         if (cantidad_palabras == 1) {
-            // TODO: IMPLEMENTAR METODO REAL -> juego.MostrarEstado();
-            cout << "(Pendiente implementar) Comando estado_juego." << endl;
+            juego.EstadoJuego();
+            
         } else {
             cout << "Uso incorrecto. Sintaxis: estado_juego (no recibe parametros)" << endl;
         }

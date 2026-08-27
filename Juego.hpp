@@ -497,6 +497,155 @@ void Juego::EliminarJugadorDeJuego(Jugador *jugadorAEliminar)
     }
 }
 
+Jugador* Juego::BuscarJugador(const string& nombre) {
+    for (Jugador* j : jugadores) {
+        if (j->ObtenerNombre() == nombre){
+            return j;
+        } 
+    }
+    return nullptr;
+}
+
+Territorio* Juego::BuscarTerritorio(const string& nombre) {
+    for (Territorio* t : territorios) {
+        if (t->ObtenerCodigo() == nombre){
+            return t;
+        }
+    }
+    return nullptr;
+}
+
+bool Juego ::VerificarGanador(){
+    for (Jugador* jugador : jugadores){
+        if(jugador->ObtenerTerritorios().size() == 42){
+            return true;
+        }
+    }
+    return false; 
+}
+
+void Juego::ReclamarUnidades(const string& nombreJugador){
+    if(!juegoInicializado){
+        cout<<"(Juego no inicializado) Esta partida no ha sido inicializada correctamente." << endl;
+        return;
+    }
+
+    if (VerificarGanador()) {
+        cout << "(Juego terminado) Esta partida ya tuvo un ganador." << endl;
+        return;
+    }
+
+    Jugador* jg = BuscarJugador(nombreJugador);
+    if (jg == nullptr) {
+        cout << "(Jugador no valido) El jugador " << nombreJugador << " no forma parte de esta partida." << endl;
+        return;
+    }
+
+    if(jg !=jugadorActual){
+        cout << "(Jugador fuera de turno) No es el turno del jugador " << nombreJugador << "." << endl;
+        return;
+    }
+
+    //Cuando obtienen nuevas unidades de ejercito por Territorios
+    int cantTerritorios = jg->ObtenerTerritorios().size();
+    int unidadesReclamar = cantTerritorios/3;
+
+    //Cuando obtiene nuevas unidades de ejercito por continentes
+        vector<string> continentes = {"America del Norte", "America del Sur", "Europa", "Africa", "Asia", "Australia"};
+        for (const string& continente : continentes) {
+        int totalEnContinente = 0;
+        int propiosEnContinente = 0;
+
+        for (Territorio* t : territorios) {
+            if (t->ObtenerContinente() == continente) {
+                totalEnContinente++;
+                if (t->ObtenerDueño() == jg){
+                    propiosEnContinente++;
+                }
+            }
+        }
+
+        if (totalEnContinente > 0 && totalEnContinente == propiosEnContinente) {
+            if (continente == "America del Sur" || continente == "Australia"){
+                unidadesReclamar += 2;
+            }else if (continente == "Africa") {
+                unidadesReclamar += 3;
+            }else if (continente == "America del Norte" || continente == "Europa") {
+                unidadesReclamar += 5;
+            }else if (continente == "Asia"){
+                unidadesReclamar += 7;
+            }
+        }
+    }
+
+    cout << "El jugador " << nombreJugador << " puede reclamar " << unidadesReclamar << " unidades nuevas." << endl;
+
+    // Ubicar las unidades nuevas
+    int unidadesRestantes = unidadesReclamar;
+    while (unidadesRestantes > 0) {
+        string codigoTerritorio;
+        int cantidad;
+
+        cout << "Unidades restantes por asignar: " << unidadesRestantes << endl;
+        cout << "Ingrese el codigo del territorio: ";
+        cin >> codigoTerritorio;
+        cout << "Ingrese la cantidad de unidades a asignar: ";
+        cin >> cantidad;
+
+        Territorio* territorio = BuscarTerritorio(codigoTerritorio);
+
+        if (territorio == nullptr || territorio->ObtenerDueño() != jg) {
+            cout << "Territorio invalido o no pertenece al jugador." << endl;
+            continue;
+        }
+
+        if (cantidad <= 0 || cantidad > unidadesRestantes) {
+            cout << "Cantidad invalida." << endl;
+            continue;
+        }
+
+        territorio->AgregarUnidades(cantidad);
+        jg->AgregarEjercito(cantidad);
+        unidadesRestantes -= cantidad;
+    }
+
+    cout << "(Comando correcto) El jugador " << nombreJugador << " ha terminado de reclamar y ubicar sus unidades." << endl;
+}
+
+void Juego::EstadoJuego(){
+    if (!juegoInicializado) {
+        cout << "(Juego no inicializado) Esta partida no ha sido inicializada correctamente." << endl;
+        return;
+    }
+
+    if (VerificarGanador()) {
+        cout << "(Juego terminado) Esta partida ya tuvo un ganador." << endl;
+        return;
+    }
+
+    cout<< "Numero de jugadores: "<< jugadores.size()<<endl;
+    cout<< "Todos los jugadores: "<<endl;
+    for(Jugador* j : jugadores){
+        cout<< j->ObtenerNombre()<<"   "<<j->ObtenerColor()<<endl; 
+    }
+    cout<< "Jugador con el turno actual: "<<jugadorActual->ObtenerNombre()<<endl; 
+
+    cout<<"Territorios: "<<endl; 
+    for(Territorio* t : territorios){
+        cout<<t->ObtenerNombre()<<"  ";
+        if(t->ObtenerDueño()== nullptr){
+            cout<<"El territorio no tiene dueño"<<endl;
+        }else{
+            string nombreDueño = t->ObtenerDueño()->ObtenerNombre();
+            string colorDueño = t->ObtenerDueño()->ObtenerColor();
+
+            cout<<"Dueño: "<< nombreDueño << "Color: "<<colorDueño <<endl;  
+        }
+
+        cout<<"Cantidad de unidades: "<<t->ObtenerUnidades()<<" "<<endl;
+        
+    }
+    
 
 void Juego::FortificarTerritorio(const string& jugador, const string& territorio) {
     
