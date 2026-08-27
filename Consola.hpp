@@ -1,18 +1,17 @@
 #include "Consola.h"
-#include "Juego.h"
-
+#include "Jugador.hpp"
+#include "Territorio.hpp"
+#include "Juego.hpp"
 #include <iostream>
 #include <sstream>
 #include <cctype>
 
 using namespace std;
 
-bool esNumeroEntero(const string& cadena)  // Tambien funciona para numeros negativos
-{
+bool esNumeroEntero(const string& cadena) {
     if (cadena.empty()) return false;
 
-    for (char const &c : cadena)
-    {
+    for (char const &c : cadena) {
         if (isdigit(c) == 0) return false;
     }
 
@@ -24,15 +23,11 @@ bool esNombreJugadorValido(const string& nombre) {
 }
 
 vector<string> separarPalabras(const string& linea) {
-
     vector<string> palabras_comando;
-
     string palabra_individual;
-
     stringstream ss(linea);
 
     while (ss >> palabra_individual) {
-
         palabras_comando.push_back(palabra_individual);
     }
     return palabras_comando;
@@ -47,30 +42,24 @@ void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando, J
     int cantidad_palabras = palabras_comando.size();
 
     if (comando_principal == "ayuda") {
-
         if (cantidad_palabras == 1) { 
             cout << "Lista de comandos disponibles:" << endl;
-            //comandos parte 1
             cout << "  - Inicializar" << endl;
             cout << "  - Obtener_unidades" << endl;
             cout << "  - Atacar" << endl;
             cout << "  - Fortificar" << endl;
             cout << "  - Estado_juego" << endl;
-            //comandos parte 2
             cout << "  - Guardar" << endl;
             cout << "  - Guardar_comprimido" << endl;
-            //comados parte 3
             cout << "  - Costo_conquista" << endl;
             cout << "  - Conquista_mas_barata" << endl;
-            //comando salida
-            cout << "  -Salir" << endl;
+            cout << "  - Salir" << endl;
             cout << "\nPara ver el uso de un comando especifico, escribe: ayuda <comando>" << endl;
         } 
         else if (cantidad_palabras == 2) {
-
             string subcomando = palabras_comando[1];
             
-            if (subcomando == "Inicializar" || subcomando == "inicializar") {  // Tambien debe aceptar "inicializar" en minusculas?
+            if (subcomando == "Inicializar" || subcomando == "inicializar") {
                 cout << "Uso: Inicializar <archivo_inicio.txt>" << endl;
                 cout << "Inicializa el juego a partir de la información contenida en el archivo \"archivo_inicio.txt\" dejando la interfaz del juego lista para recibir los turnos de cada jugador" << endl;
             } 
@@ -119,35 +108,32 @@ void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando, J
             cout << "Error en formato. Uso correcto: ayuda o ayuda <comando>" << endl;
         }
     }
-
-
-  else if (comando_principal == "Inicializar" || comando_principal == "inicializar") {
-
+    else if (comando_principal == "Inicializar" || comando_principal == "inicializar") {
         if (cantidad_palabras == 2) {
-            string nombre_archivo = palabras_comando[1]; //Para esta entrega aun no hacemos uso de binarios
+            string nombre_archivo = palabras_comando[1];
             bool es_txt = (nombre_archivo.length() >= 4 && nombre_archivo.substr(nombre_archivo.length() - 4) == ".txt");
-            bool es_bin = (nombre_archivo.length() >= 4 && nombre_archivo.substr(nombre_archivo.length() - 4) == ".bin");
             
-            // Validamos que termine sea un txt
             if (es_txt) {
-
+                // LLAMADO REAL A JUEGO
                 juego.InicializarJuego(nombre_archivo);
-
-            } else if (es_bin) {
-
-                cout << "(Archivo no valido) El archivo debe tener extension .txt" << endl;
-
             } else {
-
                 cout << "(Archivo no valido) El archivo debe tener extension .txt" << endl;
-
             }
+        } else {
+            cout << "Uso incorrecto. Sintaxis: inicializar <nombre_archivo.txt>" << endl;
         }
-
+    }
+    else if (comando_principal == "Atacar" || comando_principal == "atacar") {
+        if (cantidad_palabras == 2) {
+            // LLAMADO REAL A JUEGO: Le pasa el nombre del jugador y deja el territorio vacio para pedirlo dentro del método
+            juego.AtacarTerritorio(palabras_comando[1], "");
+        } else {
+            cout << "Uso incorrecto. Sintaxis: atacar <nombre_jugador>" << endl;
+        }
     }
     else if (comando_principal == "Obtener_unidades" || comando_principal == "obtener_unidades") {
         if (cantidad_palabras == 2) {
-            if (esNombreJugadorValido(palabras_comando[1])) {
+              if (esNombreJugadorValido(palabras_comando[1])) {
                 juego.ReclamarUnidades(palabras_comando[1]);
             } else {
                 cout << "(Jugador no valido) El nombre debe tener maximo 8 caracteres." << endl;
@@ -156,27 +142,11 @@ void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando, J
             cout << "Uso incorrecto. Sintaxis: obtener_unidades <nombre_jugador>" << endl;
         }
     }
-    else if (comando_principal == "Atacar" || comando_principal == "atacar") {
-        if (cantidad_palabras == 2) {
-            //editar para entrega 1 detectar si nombre de jugador existe en partida, si no existe mostrar mensaje de error
-            if (esNombreJugadorValido(palabras_comando[1])) {
-                cout << "(simulacion!!!!) Comando atacar ejecutado para jugador: " << palabras_comando[1] << endl;
-                cout << "(simulacion!!!!) preguntando y recibiendo respuesta" << endl;
-                cout << "(Simulacion!!!!) Ataque desde territorio A hacia territorio B. Resultado: Jugador " << palabras_comando[1] << " gana el ataque." << endl;
-            } else {
-                cout << "(Jugador no valido) El nombre debe tener maximo 8 caracteres." << endl;
-            }
-        } else {
-            cout << "Uso incorrecto. Sintaxis: atacar <nombre_jugador>" << endl;
-        }
-    }
     else if (comando_principal == "Fortificar" || comando_principal == "fortificar") {
         if (cantidad_palabras == 2) {
-            //editar para entrega 1 detectar si nombre de jugador existe en partida, si no existe mostrar mensaje de error
             if (esNombreJugadorValido(palabras_comando[1])) {
-                cout << "(simulacion!!!!) Comando fortificar validado para: " << palabras_comando[1] << endl;
-                cout << "(simulacion!!!!) preguntando y recibiendo respuesta" << endl;
-                cout << "(Simulacion!!!!) Fortificacion de territorio A hacia territorio B. Resultado: Jugador " << palabras_comando[1] << " ha fortificado exitosamente." << endl;
+                // TODO: IMPLEMENTAR METODO REAL -> juego.Fortificar(palabras_comando[1]);
+                cout << "(Pendiente implementar) Comando fortificar para: " << palabras_comando[1] << endl;
             } else {
                 cout << "(Jugador no valido) El nombre debe tener maximo 8 caracteres." << endl;
             }
@@ -194,23 +164,25 @@ void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando, J
     }
     else if (comando_principal == "Guardar" || comando_principal == "guardar") {
         if (cantidad_palabras == 2) {
-            cout << "(simulacion!!!!) Comando guardar actualizando en archivo: " << palabras_comando[1] << endl;
+            // TODO: IMPLEMENTAR METODO REAL -> juego.GuardarPartida(palabras_comando[1]);
+            cout << "(Pendiente implementar) Comando guardar en: " << palabras_comando[1] << endl;
         } else {
             cout << "Uso incorrecto. Sintaxis: guardar <nombre_archivo>" << endl;
         }
     }
     else if (comando_principal == "Guardar_comprimido" || comando_principal == "guardar_comprimido") {
         if (cantidad_palabras == 2) {
-            cout << "(simulacion!!!!) Comando guardar_comprimido actualizando en archivo: " << palabras_comando[1] << endl;
+            // TODO: IMPLEMENTAR METODO REAL -> juego.GuardarComprimido(palabras_comando[1]);
+            cout << "(Pendiente implementar) Comando guardar_comprimido en: " << palabras_comando[1] << endl;
         } else {
             cout << "Uso incorrecto. Sintaxis: guardar_comprimido <nombre_archivo>" << endl;
         }
     }
     else if (comando_principal == "Costo_conquista" || comando_principal == "costo_conquista") {
         if (cantidad_palabras == 3) {
-            //editar para entrega 1 detectar si nombre de jugador existe en partida, si no existe mostrar mensaje de error
             if (esNombreJugadorValido(palabras_comando[1])) {
-                cout << "(simulacion!!!!) Comando costo_conquista validado para " << palabras_comando[1] << " hacia " << palabras_comando[2] << endl;
+                // TODO: IMPLEMENTAR METODO REAL (Grafo/Dijkstra) -> juego.CostoConquista(palabras_comando[1], palabras_comando[2]);
+                cout << "(Pendiente implementar) Comando costo_conquista para: " << palabras_comando[1] << " hacia " << palabras_comando[2] << endl;
             } else {
                 cout << "(Jugador no valido) El nombre debe tener maximo 8 caracteres." << endl;
             }
@@ -220,9 +192,9 @@ void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando, J
     }
     else if (comando_principal == "Conquista_mas_barata" || comando_principal == "conquista_mas_barata") {
         if (cantidad_palabras == 2) {
-            //editar para entrega 1 detectar si nombre de jugador existe en partida, si no existe mostrar mensaje de error
             if (esNombreJugadorValido(palabras_comando[1])) {
-                cout << "(simulacion!!!!) Comando conquista_mas_barata validado para: " << palabras_comando[1] << endl;
+                // TODO: IMPLEMENTAR METODO REAL -> juego.ConquistaMasBarata(palabras_comando[1]);
+                cout << "(Pendiente implementar) Comando conquista_mas_barata para: " << palabras_comando[1] << endl;
             } else {
                 cout << "(Jugador no valido) El nombre debe tener maximo 8 caracteres." << endl;
             }
@@ -242,23 +214,34 @@ void procesarEntrada(const vector<string>& palabras_comando, bool& ejecutando, J
     }
 }
 
-
-void iniciarConsola()
-{
+void iniciarConsola() {
     Juego juego;
-
     string entrada;
     bool ejecutando = true;
 
-    cout << "Bienvenido..." << endl;
+    cout << R"(
+ ____  ___ ____  _  __    ____ _     ___ _____ _   _ _____ 
+|  _ \|_ _/ ___|| |/ /    / ___| |   |_ _| ____| \ | |_   _|
+| |_) || |\___ \| ' /    | |   | |    | ||  _| |  \| | | |  
+|  _ < | | ___) | . \    | |___| |___ | || |___| |\  | | |  
+|_| \_\___|____/|_|\_\    \____|_____|___|_____|_| \_| |_|  
+)" << endl;
+    cout << "=================================================================" << endl;
+    cout << "         Sistema de Control y Estrategia - Risk C++              " << endl;
+    cout << "=================================================================" << endl;
+    cout << "  Escribe 'ayuda' para desplegar la lista de comandos." << endl;
+    cout << "  Escribe 'salir' para finalizar la partida." << endl;
+    cout << "=================================================================\n" << endl;
 
-    while (ejecutando)
-    {
+    while (ejecutando) {
         cout << "$ ";
-        getline(cin, entrada);
+        if (!getline(cin, entrada)) break;
 
         vector<string> palabras = separarPalabras(entrada);
-
         procesarEntrada(palabras, ejecutando, juego);
     }
+    cout << endl;
+    cout << "=================================================================" << endl;
+    cout << "      ¡Gracias por jugar! Has salido con exito de Risk           " << endl;
+    cout << "=================================================================" << endl;
 }

@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <list>
+
 using namespace std;
 
 class Territorio; //Podemos usar una declaracion adelantada, no necesitamos conocer todo el TAD terrirtorio, solo necesitamos saber que existe para apuntar
@@ -18,6 +19,7 @@ class Jugador {
 
     public:
         Jugador(const string& nombre, const string& color);
+        
         void AgregarTerritorio(Territorio* territorio);
         void EliminarTerritorio(Territorio* territorio);
         void AgregarEjercito(int cantidad);
