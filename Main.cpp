@@ -1,4 +1,4 @@
-#include "interfaz.h"
+#include "consola.h"
 
 int main() {
     iniciarConsola();
